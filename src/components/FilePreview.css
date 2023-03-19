@@ -1,0 +1,11 @@
+.file-preview {
+    width: 100%;
+    max-width: 800px;
+    margin: 1rem auto;
+    padding: 1rem;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+  
