@@ -1,12 +1,19 @@
 import React from 'react';
 import DragAndDropArea from './DragAndDropArea';
+import './FileContent.css';
 
-const LandingPage = ({ onFileDrop, loading, fileContent }) => {
+const LandingPage = ({ onFileDrop, loading, setLoading, fileContent }) => {
   return (
     <div className="landing-page">
       <h1>Upload your resume</h1>
-      <DragAndDropArea onDrop={onFileDrop} loading={loading} />
-      {fileContent ? (
+      <DragAndDropArea
+        onDrop={onFileDrop}
+        loading={loading}
+        setLoading={setLoading}
+      />
+      {loading ? (
+        <p>Loading...</p>
+      ) : fileContent ? (
         <div className="file-content">
           <pre>{fileContent}</pre>
         </div>

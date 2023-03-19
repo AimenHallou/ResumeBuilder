@@ -6,13 +6,17 @@ import MainPage from './components/MainPage';
 
 function App() {
   const [fileContent, setFileContent] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const onFileDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
     const reader = new FileReader();
 
+    setLoading(true);
+
     reader.onload = () => {
       setFileContent(reader.result);
+      setLoading(false);
     };
 
     reader.readAsText(file);
@@ -23,10 +27,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route
-            path="/upload"
-            element={<LandingPage onFileDrop={onFileDrop} fileContent={fileContent} />}
-          />
+          <Route path="/upload" element={<LandingPage onFileDrop={onFileDrop} loading={loading} fileContent={fileContent} />} />
         </Routes>
       </Router>
     </div>

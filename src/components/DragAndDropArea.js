@@ -5,7 +5,7 @@ const DragAndDropArea = ({ onDrop, accept }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept,
-    noClick: false,
+    noClick: true,
     noKeyboard: true,
   });
 
