@@ -1,25 +1,23 @@
 /* LandingPage.js */
 .landing-page {
   text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
 }
 
 .landing-page h1 {
   font-size: 2.5rem;
   margin-bottom: 2rem;
+  color: #fff;
 }
 
 .file-content {
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background-color: #2c2c2c;
+  color: #ffffff;
   padding: 1rem;
-  margin-top: 1rem;
-  max-width: 100%;
+  border-radius: 4px;
+  max-width: 90%;
   overflow-x: auto;
   white-space: pre-wrap;
-  background-color: #fff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word;
 }
 
 .file-content pre {
