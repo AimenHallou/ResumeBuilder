@@ -1,15 +1,11 @@
-/* FileUploader.css */
 .file-uploader {
-  border: 1px dashed #999;
-  border-radius: 4px;
-  padding: 2rem;
+  text-align: center;
+  font-size: 1rem;
+  color: #61dafb;
   cursor: pointer;
-  color: #999;
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
+  transition: color 0.2s;
 }
 
 .file-uploader:hover {
   color: #007bff;
-  border-color: #007bff;
 }
