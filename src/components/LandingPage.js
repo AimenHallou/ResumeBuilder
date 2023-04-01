@@ -1,76 +1,39 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import DragAndDropArea from './DragAndDropArea';
 import PDFViewer from './PDFViewer';
-import { getResumeSuggestions } from '../services/aiService';
-import { Container, Typography, Box, Paper } from '@mui/material';
-import './LandingPage.css';
 
-const LandingPage = ({ onFileDrop, loading, setLoading, fileContent, error, fileType }) => {
-  const [suggestions, setSuggestions] = useState([]);
-
-  const handleFileDrop = async (acceptedFiles) => {
-    onFileDrop(acceptedFiles);
-    if (acceptedFiles.length > 0) {
-      try {
-        setLoading(true);
-        const suggestions = await getResumeSuggestions(acceptedFiles[0]);
-        setSuggestions(suggestions);
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
-        console.error('Error getting suggestions:', err);
-      }
-    }
-  };
+const LandingPage = ({ onFileDrop, loading, setLoading, file, error }) => {
+  const isPDF = file && file.type === 'application/pdf';
 
   return (
-    <Container maxWidth="md">
-      <Typography variant="h4" gutterBottom>
-        Upload your resume
-      </Typography>
+    <div className="landing-page">
+      <h1>Upload your resume</h1>
       <DragAndDropArea
-        onDrop={handleFileDrop}
+        onDrop={onFileDrop}
         loading={loading}
         setLoading={setLoading}
         accept=".txt,.pdf,.docx,.md"
         maxSize={2000000}
       />
       {error && (
-        <Box mt={2}>
-          <Typography color="error">{error}</Typography>
-        </Box>
+        <div className="error-message">
+          <p>{error}</p>
+        </div>
       )}
-      {fileContent ? (
-        <Box mt={2}>
-          <Paper elevation={2} className="file-content">
-            {fileType === 'application/pdf' ? (
-              <PDFViewer file={fileContent} />
-            ) : (
-              <pre>{fileContent}</pre>
-            )}
-          </Paper>
-        </Box>
+      {file ? (
+        <div className="file-content">
+          {isPDF ? (
+            <PDFViewer file={file} />
+          ) : (
+            <pre>{file.content}</pre>
+          )}
+        </div>
       ) : (
-        <Box mt={2}>
-          <Typography>No file uploaded</Typography>
-        </Box>
+        <div className="file-content">
+          <p>No file uploaded</p>
+        </div>
       )}
-      {suggestions.length > 0 && (
-        <Box mt={2}>
-          <Typography variant="h5" gutterBottom>
-            Suggestions:
-          </Typography>
-          <ul>
-            {suggestions.map((suggestion, index) => (
-              <li key={index}>
-                Line {suggestion.line}: {suggestion.message}
-              </li>
-            ))}
-          </ul>
-        </Box>
-      )}
-    </Container>
+    </div>
   );
 };
 

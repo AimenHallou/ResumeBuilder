@@ -1,55 +1,70 @@
-// src/App.js
-
 import React, { useState } from 'react';
-import { DropzoneAreaBase } from 'material-ui-dropzone';
-import { Box, Typography } from '@material-ui/core';
-import PDFViewer from './components/PDFViewer';
+import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LandingPage from './components/LandingPage';
+import MainPage from './components/MainPage';
+import Spinner from './components/Spinner';
 
 function App() {
-  const [fileContent, setFileContent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const maxFileSize = 2 * 1024 * 1024;
+  const [file, setFile] = useState(null);
+
   const onFileDrop = (acceptedFiles) => {
-    if (acceptedFiles.length === 0) {
+    setError(null);
+    setLoading(true);
+
+    const file = acceptedFiles[0];
+
+    if (file.size > maxFileSize) {
+      setError('File size exceeds the 2 MB limit. Please choose a smaller file.');
+      setLoading(false);
       return;
     }
 
-    setLoading(true);
-    const file = acceptedFiles[0];
-
-    const reader = new FileReader();
-
-    reader.onload = () => {
-      setFileContent(acceptedFiles[0]);
+    if (file.type === 'application/pdf') {
+      setFile(file);
       setLoading(false);
       setError(null);
-    };
+    } else {
+      const reader = new FileReader();
 
-    reader.onerror = (error) => {
-      setLoading(false);
-      setError('Error reading file');
-    };
+      reader.onload = () => {
+        setFile({ ...file, content: reader.result });
+        setLoading(false);
+        setError(null);
+      };
 
-    reader.readAsArrayBuffer(file);
+      reader.onerror = () => {
+        setError('An error occurred while reading the file. Please try again.');
+        setLoading(false);
+      };
+
+      reader.readAsText(file);
+    }
   };
 
   return (
     <div className="App">
-      <Box>
-        <Typography variant="h4">Upload your PDF</Typography>
-        <DropzoneAreaBase
-          acceptedFiles={['application/pdf']}
-          filesLimit={1}
-          maxFileSize={5000000}
-          onDrop={onFileDrop}
-          showFileNames
-          dropzoneText="Drag and drop a PDF file here or click to upload"
-        />
-      </Box>
-      {loading && <Typography variant="h6">Loading...</Typography>}
-      {error && <Typography variant="h6">{error}</Typography>}
-      {fileContent && <PDFViewer file={fileContent} />}
+      <Router>
+        <Routes>
+          <Route path="/" element={<MainPage />} />
+          <Route
+            path="/upload"
+            element={
+              <LandingPage
+                onFileDrop={onFileDrop}
+                loading={loading}
+                file={file}
+                error={error}
+              />
+            }
+          />
+        </Routes>
+      </Router>
+      {loading && <Spinner />}
     </div>
   );
 }
