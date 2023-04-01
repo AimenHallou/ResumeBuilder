@@ -14,7 +14,7 @@ const PDFViewer = ({ file }) => {
   }
 
   return (
-    <div>
+    <div className="pdf-viewer" style={{ maxWidth: '80%', margin: '0 auto' }}>
       <Document
         file={file}
         onLoadSuccess={onDocumentLoadSuccess}
@@ -25,7 +25,8 @@ const PDFViewer = ({ file }) => {
             <Page
               key={`page_${index + 1}`}
               pageNumber={index + 1}
-              width={Math.min(600, document.documentElement.clientWidth - 32)}
+              width={Math.min(600, document.documentElement.clientWidth - 64)}
+              renderTextLayer={false}
             />
           ),
         )}

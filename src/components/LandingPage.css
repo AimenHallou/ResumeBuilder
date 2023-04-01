@@ -1,10 +1,17 @@
 .landing-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto; 
 }
 
 .landing-page h1 {
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
   color: #fff;
 }
 
@@ -13,7 +20,7 @@
   color: #ffffff;
   padding: 1rem;
   border-radius: 4px;
-  max-width: 90%;
+  max-width: 80%;
   overflow-x: auto;
   white-space: pre-wrap;
   word-wrap: break-word;
