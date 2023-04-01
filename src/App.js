@@ -1,66 +1,55 @@
+// src/App.js
+
 import React, { useState } from 'react';
-import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LandingPage from './components/LandingPage';
-import MainPage from './components/MainPage';
-import Spinner from './components/Spinner';
+import { DropzoneAreaBase } from 'material-ui-dropzone';
+import { Box, Typography } from '@material-ui/core';
+import PDFViewer from './components/PDFViewer';
 
 function App() {
   const [fileContent, setFileContent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const maxFileSize = 2 * 1024 * 1024;
   const onFileDrop = (acceptedFiles) => {
-    // Add these lines to reset the state before processing a new file
-    setError(null);
-    setFileContent(null);
-    setLoading(true);
-  
-    const file = acceptedFiles[0];
-  
-    if (file.size > maxFileSize) {
-      setError('File size exceeds the 2 MB limit. Please choose a smaller file.');
-      setLoading(false);
+    if (acceptedFiles.length === 0) {
       return;
     }
-  
+
+    setLoading(true);
+    const file = acceptedFiles[0];
+
     const reader = new FileReader();
-  
+
     reader.onload = () => {
-      setFileContent(reader.result);
+      setFileContent(acceptedFiles[0]);
       setLoading(false);
       setError(null);
     };
-  
-    reader.onerror = () => {
-      setError('An error occurred while reading the file. Please try again.');
+
+    reader.onerror = (error) => {
       setLoading(false);
+      setError('Error reading file');
     };
-  
-    reader.readAsText(file);
+
+    reader.readAsArrayBuffer(file);
   };
-  
 
   return (
     <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route
-            path="/upload"
-            element={
-              <LandingPage
-                onFileDrop={onFileDrop}
-                loading={loading}
-                fileContent={fileContent}
-                error={error}
-              />
-            }
-          />
-        </Routes>
-      </Router>
-      {loading && <Spinner />}
+      <Box>
+        <Typography variant="h4">Upload your PDF</Typography>
+        <DropzoneAreaBase
+          acceptedFiles={['application/pdf']}
+          filesLimit={1}
+          maxFileSize={5000000}
+          onDrop={onFileDrop}
+          showFileNames
+          dropzoneText="Drag and drop a PDF file here or click to upload"
+        />
+      </Box>
+      {loading && <Typography variant="h6">Loading...</Typography>}
+      {error && <Typography variant="h6">{error}</Typography>}
+      {fileContent && <PDFViewer file={fileContent} />}
     </div>
   );
 }

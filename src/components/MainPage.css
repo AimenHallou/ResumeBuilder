@@ -22,4 +22,13 @@
   .main-page button:hover {
     background-color: #0056b3;
   }
+
+  .file-content pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    overflow-x: auto;
+    max-height: 300px;
+    overflow-y: auto;
+  }
   
